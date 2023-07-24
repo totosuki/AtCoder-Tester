@@ -2,27 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import config
 import os.path
-# import sys
 import tempfile
 import subprocess
-import argparse
-
-parser = argparse.ArgumentParser()
-parser.add_argument("-c", "--contest", default = "abc", help = "Contest Name [default = abc]")
-parser.add_argument("number", help = "Contest number")
-parser.add_argument("problem", help = "Problem alphabet")
-args = parser.parse_args()
-level = args.contest
-round = args.number
-prob = args.problem
-
-CPP_ID = 3003
-
-LOGIN_URL = 'https://atcoder.jp/login'
-PROB_URL = "https://atcoder.jp/contests/{}{}/tasks/{}{}_{}".format(level.lower(), round.zfill(3), level.lower(), round.zfill(3), prob.lower())
-SUBMIT_URL = "https://atcoder.jp/contests/{}{}/submit".format(level.lower(), round.zfill(3))
-
-TASK_SCREEN_NAME = "{}{}_{}".format(level.lower(), round.zfill(3), prob.lower())
+import data
 
 login_info = dict()
 submit_info = dict()
@@ -31,7 +13,7 @@ submit_info = dict()
 session = requests.session()
 
 def login():
-  res = session.get(LOGIN_URL)
+  res = session.get(data.LOGIN_URL)
   soup = BeautifulSoup(res.text, 'lxml')
   csrf_token = soup.find(attrs={'name': 'csrf_token'}).get('value')
 
@@ -40,7 +22,7 @@ def login():
   login_info["password"] = config.PASSWORD
 
   # Login
-  session.post(LOGIN_URL, data = login_info).raise_for_status()
+  session.post(data.LOGIN_URL, data = login_info).raise_for_status()
   
   print("Login!", end = "\n\n")
 
@@ -61,7 +43,7 @@ def get_source_code(source_path):
       quit()
 
 def get_data():
-  res = session.get(PROB_URL)
+  res = session.get(data.PROB_URL)
   soup = BeautifulSoup(res.content, "lxml")
   samples = [tag.text.strip() for tag in soup.find_all("pre")]
   samples = samples[:len(samples)//2]
@@ -102,11 +84,11 @@ def submit(source_code):
     "User-Agent": "Mozilla/5.0"
   }
   submit_info["csrf_token"] = login_info["csrf_token"]
-  submit_info["data.TaskScreenName"] = TASK_SCREEN_NAME
+  submit_info["data.TaskScreenName"] = data.TASK_SCREEN_NAME
   submit_info["data.LanguageId"] = 4006 # This is Python language id
   submit_info["sourceCode"] = source_code
   
-  session.post(SUBMIT_URL, data = submit_info, headers = header_info).raise_for_status()
+  session.post(data.SUBMIT_URL, data = submit_info, headers = header_info).raise_for_status()
 
   print("Submit!")
 
