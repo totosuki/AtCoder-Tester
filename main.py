@@ -57,11 +57,7 @@ def test(inputs, outputs, source_path) -> bool:
 
   def display_result(number, input, output, result, is_ac):
     print(f"----- Example {number+1} -----")
-    if is_ac:
-      ac_cnt += 1
-      print("AC")
-    else:
-      print("WA")
+    print("AC") if is_ac else print("WA")
     print("<Input>")
     print(input.strip())
     print("<Output>")
@@ -85,7 +81,11 @@ def test(inputs, outputs, source_path) -> bool:
       except subprocess.CalledProcessError:
         raise Exception("The code has an error")
     
-    display_result(i, inputs[i], outputs[i], result, outputs[i] == result)
+    input, output, result = map(str.strip, [inputs[i], outputs[i], result])
+    is_ac = output == result
+    ac_cnt += is_ac
+    
+    display_result(i, input, output, result, is_ac)
   
   return True if ac_cnt == number_of_case else False
 
