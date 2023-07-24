@@ -1,9 +1,13 @@
-N = int(input())
-S = input()
-se = set()
+import sys
+input = sys.stdin.buffer.readline
 
-for i in range(len(S)):
-  se.add(S[i])
-  if len(se) == 3:
-    print(i+1)
-    exit()
+A, B = map(int, input().split())
+answer = "No"
+
+if B-1 == A:
+  if B % 3 == 1:
+    answer = "No"
+  else:
+    answer = "Yes"
+
+print(answer)

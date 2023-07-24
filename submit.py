@@ -1,15 +1,20 @@
 import requests
 from bs4 import BeautifulSoup
-from config import Config
+import config
 import os.path
-import sys
+# import sys
 import tempfile
 import subprocess
 import argparse
 
-# Params
-args = sys.argv
-level, round, prob = args[1], args[2], args[3]
+parser = argparse.ArgumentParser()
+parser.add_argument("-c", "--contest", default = "abc", help = "Contest Name [default = abc]")
+parser.add_argument("number", help = "Contest number")
+parser.add_argument("problem", help = "Problem alphabet")
+args = parser.parse_args()
+level = args.contest
+round = args.number
+prob = args.problem
 
 CPP_ID = 3003
 
@@ -25,31 +30,19 @@ submit_info = dict()
 # Start session
 session = requests.session()
 
-def get_csrf_token(url):
-  res = session.get(url)
-  res.raise_for_status()
-  soup = BeautifulSoup(res.content, "lxml")
-  csrf_token = soup.find(attrs={"name": "csrf_token"}).get("value")
-  return csrf_token
-
-def setting():
-  parser = argparse.ArgumentParser()
-  parser.add_argument("-c", "--contest", default = "abc", help = "Contest Name [default = abc]")
-  parser.add_argument("number", help = "Contest number")
-
 def login():
   res = session.get(LOGIN_URL)
   soup = BeautifulSoup(res.text, 'lxml')
   csrf_token = soup.find(attrs={'name': 'csrf_token'}).get('value')
 
   login_info["csrf_token"] = csrf_token
-  login_info["username"] = Config.USERNAME
-  login_info["password"] = Config.PASSWORD
+  login_info["username"] = config.USERNAME
+  login_info["password"] = config.PASSWORD
 
   # Login
   session.post(LOGIN_URL, data = login_info).raise_for_status()
   
-  print("Login!")
+  print("Login!", end = "\n\n")
 
 def get_source_path():
   # Get source path
@@ -106,10 +99,9 @@ def test(inputs, outputs, source_path):
 
 def submit(source_code):
   header_info = {
-    "User-Agent": Config.USERAGENT
+    "User-Agent": "Mozilla/5.0"
   }
-  
-  submit_info["csrf_token"] = get_csrf_token(SUBMIT_URL)
+  submit_info["csrf_token"] = login_info["csrf_token"]
   submit_info["data.TaskScreenName"] = TASK_SCREEN_NAME
   submit_info["data.LanguageId"] = 4006 # This is Python language id
   submit_info["sourceCode"] = source_code
