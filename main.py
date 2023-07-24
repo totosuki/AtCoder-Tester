@@ -52,7 +52,7 @@ def get_data():
   return inputs, outputs
 
 def test(inputs, outputs, source_path) -> bool:
-  ac_cnt = 0
+  wa_case = list()
   number_of_case = len(inputs)
 
   def display_result(number, input, output, result, is_ac):
@@ -83,11 +83,19 @@ def test(inputs, outputs, source_path) -> bool:
     
     input, output, result = map(str.strip, [inputs[i], outputs[i], result])
     is_ac = output == result
-    ac_cnt += is_ac
+    
+    if not is_ac:
+      wa_case.append(i+1)
     
     display_result(i, input, output, result, is_ac)
   
-  return True if ac_cnt == number_of_case else False
+  if len(wa_case) == 0:
+    print("All AC!!", end = "\n\n")
+    return True
+  else:
+    for case in wa_case:
+      print(f"Example {case} is WA...")
+    return False
 
 def submit(source_code):
   header_info = {
