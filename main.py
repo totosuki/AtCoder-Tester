@@ -5,6 +5,7 @@ import os.path
 import tempfile
 import subprocess
 import data
+import re
 
 login_info = dict()
 submit_info = dict()
@@ -27,9 +28,7 @@ def login():
   print("Login!", end = "\n\n")
 
 def get_source_path():
-  # Get source path
-  # source_path = f"../{name}/contest/{prob.upper()}.py"
-  source_path = "test.py"
+  source_path = f"{config.PATH}/contest/{data.problem.upper()}.py"
   return source_path
 
 def get_source_code(source_path):
@@ -47,8 +46,8 @@ def get_data():
   soup = BeautifulSoup(res.content, "lxml")
   samples = [tag.text.strip() for tag in soup.find_all("pre")]
   samples = samples[:len(samples)//2]
-  inputs = samples[1::2]
-  outputs = samples[2::2]
+  inputs = [re.sub("\r", "", input) for input in samples[1::2]]
+  outputs = [re.sub("\r", "", output) for output in samples[2::2]]
   return inputs, outputs
 
 def test(inputs, outputs, source_path) -> bool:
@@ -66,9 +65,9 @@ def test(inputs, outputs, source_path) -> bool:
     print(result.strip())
     print("")
 
-  for i in range(number_of_case):
+  for i, (input, output) in enumerate(zip(inputs, outputs)):
     with tempfile.TemporaryFile(mode = "w") as f:
-      f.write(inputs[i])
+      f.write(input)
       f.seek(0)
       try:
         result = subprocess.run(
@@ -81,9 +80,9 @@ def test(inputs, outputs, source_path) -> bool:
       except subprocess.CalledProcessError:
         raise Exception("The code has an error")
     
-    input, output, result = map(str.strip, [inputs[i], outputs[i], result])
+    input, output, result = map(str.strip, [input, output, result])
     is_ac = output == result
-    
+
     if not is_ac:
       wa_case.append(i+1)
     
