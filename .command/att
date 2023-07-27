@@ -1,11 +1,11 @@
 #!/bin/sh
 
 if test "$1" = "test" ; then
-  python3 ../main.py "${@:2}"
+  python3 main.py "${@:2}"
 elif test "$1" = "submit" ; then
-  python3 ../main.py "${@:2}"
+  python3 main.py "${@:2}"
 elif test "$1" = "setting" ; then
-  ../setting.sh
+  ./setting.sh
 elif test "$1" = "copy" ; then
   pytohn3 folder_manager.py "${@:2}"
 elif test "$1" = "clear" ; then
