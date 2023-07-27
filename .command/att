@@ -7,9 +7,9 @@ elif test "$1" = "submit" ; then
 elif test "$1" = "setting" ; then
   ./setting.sh
 elif test "$1" = "copy" ; then
-  pytohn3 folder_manager.py "${@:2}"
+  python3 folder_copy.py "${@:2}"
 elif test "$1" = "clear" ; then
-  python3 folder_manager.py "${@:2}"
+  python3 folder_clear.py "${@:2}"
 else
   echo "Command name missing..."
 fi
