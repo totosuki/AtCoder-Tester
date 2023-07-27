@@ -35,7 +35,7 @@ def config_args():
   return args
 
 
-def copy_python_file(prob: Probrem):
+def copy(prob: Probrem):
   path = f"{root_path}/contest/{prob.probrem}.py"
 
   new_dir = f"{root_path}/{prob.contest}/{prob.probrem}"
@@ -50,12 +50,12 @@ def copy_python_file(prob: Probrem):
 
 def main():
   args = config_args()
-
+  
   if len(args.probrems) == 0:
     args.probrems = [*list("ABCDEFG"),"EX"]
 
-  for prob in args.probrems:
-    copy_python_file(Probrem(args.contest, args.number, prob))
+  for probrem in args.probrems:
+    copy(Probrem(args.contest, args.number, probrem))
 
 
 if __name__ == '__main__':
