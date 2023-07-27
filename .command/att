@@ -1,15 +1,18 @@
 #!/bin/sh
 
+parent_dir="$(dirname $(dirname "$0"))"
+echo $parent_dir
+
 if test "$1" = "test" ; then
-  python3 main.py "${@:2}"
+  python3 $parent_dir/main.py "${@:2}"
 elif test "$1" = "submit" ; then
-  python3 main.py "${@:2}"
+  python3 $parent_dir/main.py "${@:2}"
 elif test "$1" = "setting" ; then
-  ./setting.sh
+  $parent_dir/setting.sh
 elif test "$1" = "copy" ; then
-  python3 folder_copy.py "${@:2}"
+  python3 $parent_dir/folder_copy.py "${@:2}"
 elif test "$1" = "clear" ; then
-  python3 folder_clear.py "${@:2}"
+  python3 $parent_dir/folder_clear.py "${@:2}"
 else
   echo "Command name missing..."
 fi
