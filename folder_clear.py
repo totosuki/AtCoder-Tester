@@ -28,6 +28,8 @@ def main():
   for probrem in args.probrems:
     clear(probrem.upper())
 
+  print(f"{','.join(args.probrems)}をクリアしました。")
+
 
 if __name__ == '__main__':
   main()

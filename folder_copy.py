@@ -57,6 +57,8 @@ def main():
   for probrem in args.probrems:
     copy(Probrem(args.contest, args.number, probrem))
 
+  print(f"{','.join(args.probrems)}をコピーしました。")
+
 
 if __name__ == '__main__':
   main()
