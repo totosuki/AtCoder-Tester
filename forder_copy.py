@@ -51,7 +51,7 @@ def copy(prob: Probrem):
 def main():
   args = config_args()
   
-  if len(args.probrems) == 0:
+  if len(args.probrems) == 0 or "all" in args.probrems:
     args.probrems = [*list("ABCDEFG"),"EX"]
 
   for probrem in args.probrems:
