@@ -117,5 +117,7 @@ def main():
   can_submit = test(inputs, outputs, source_path)
   if can_submit and data.mode == "submit":
     submit(source_code)
+  elif data.mode == "submit":
+    print("\nExample is not All AC\nSo submit is not possible...")
 
 main()
