@@ -1,5 +1,7 @@
 #!/bin/bash
 
+parent_dir=$1
+
 escape_slash() {
   echo "$1" | sed 's/\//\\\//g'
 }
@@ -10,10 +12,10 @@ write_to_env() {
 
   if [ -n "$value" ]; then
     value=$(escape_slash "$value")
-    if grep -q "^$key=" .env; then
-      sed -i '' "s/^$key=.*/$key=$value/" .env
+    if grep -q "^$key=" $parent_dir/.env; then
+      sed -i '' "s/^$key=.*/$key=$value/" $parent_dir/.env
     else
-      echo "$key=$value" >> .env
+      echo "$key=$value" >> $parent_dir/.env
     fi
   fi
 }
@@ -40,7 +42,7 @@ create_python_file() {
   fi
 }
 
-env_file=".env"
+env_file=$parent_dir/.env
 if [ ! -e "$env_file" ]; then
   touch "$env_file"
 fi
