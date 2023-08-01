@@ -3,9 +3,9 @@
 parent_dir="$(dirname $(dirname "$0"))"
 
 if test "$1" = "test" ; then
-  python3 $parent_dir/main.py "${@:2}"
+  python3 $parent_dir/main.py test "${@:2}"
 elif test "$1" = "submit" ; then
-  python3 $parent_dir/main.py "${@:2}"
+  python3 $parent_dir/main.py submit "${@:2}"
 elif test "$1" = "setting" ; then
   $parent_dir/setting.sh $parent_dir
 elif test "$1" = "copy" ; then
