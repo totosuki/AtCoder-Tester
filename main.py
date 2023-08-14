@@ -102,9 +102,7 @@ def submit(source_code):
   }
   submit_info["csrf_token"] = login_info["csrf_token"]
   submit_info["data.TaskScreenName"] = data.TASK_SCREEN_NAME
-  # Python3.8: 4006, Python3.11: 5055
-  # PyPy7.3.0: 4047, PyPy7.3.12: 5078
-  submit_info["data.LanguageId"] = 4047
+  submit_info["data.LanguageId"] = config.LANGUAGE
   submit_info["sourceCode"] = source_code
   
   session.post(data.SUBMIT_URL, data = submit_info, headers = header_info).raise_for_status()
